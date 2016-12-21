@@ -5,8 +5,8 @@ var CodArt = []; var NomArt = [];
 var urlDOMAUX = "http://187.157.115.98:80/"; var Publi = 1;
 var urlWcfAUX = "http://187.157.115.98:100/wcf/WcfServiceLibrary1.Json.svc/"; 
 var urlDOM    = ""; 
-//var urlWcf    = "http://187.157.115.98:100/wcf/WcfServiceLibrary1.Json.svc/"; 
-var urlWcf = "http://localhost:8732/Design_Time_Addresses/WcfServiceLibrary1/Json/"; 
+var urlWcf    = "http://187.157.115.98:100/wcf/WcfServiceLibrary1.Json.svc/"; 
+//var urlWcf = "http://localhost:8732/Design_Time_Addresses/WcfServiceLibrary1/Json/"; 
 var urlDOM2    = "http://189.203.180.22:80/"; var Publi = 1; //activa
 var urlWcf2    = "http://189.203.180.22:100/wcf/WcfServiceLibrary1.Json.svc/"; //activa
 // var urlWcf = "http://192.168.2.100:100/wcf/WcfServiceLibrary1.Json.svc/"; 
@@ -34,23 +34,23 @@ $(document).bind("pageinit", function () {
               if(ipServidor == null || ipServidor ==""){
                 $("#"+ipServidor).addClass('operando');
                 urlDOM = "http://187.157.115.98:80/";
-                //urlWcf = "http://187.157.115.98:100/wcf/WcfServiceLibrary1.Json.svc/"; 
-                urlWcf = "http://localhost:8732/Design_Time_Addresses/WcfServiceLibrary1/Json/"; 
+                urlWcf = "http://187.157.115.98:100/wcf/WcfServiceLibrary1.Json.svc/"; 
+                //urlWcf = "http://localhost:8732/Design_Time_Addresses/WcfServiceLibrary1/Json/"; 
                 // alert("180.22");
               }
               else{
                 if(ipServidor == "TELMEX"){
                   $("#"+ipServidor).addClass('operando');
                   urlDOM = "http://187.157.115.98:80/"; 
-                  //urlWcf = "http://187.157.115.98:100/wcf/WcfServiceLibrary1.Json.svc/"; 
-                  urlWcf = "http://localhost:8732/Design_Time_Addresses/WcfServiceLibrary1/Json/"; 
+                  urlWcf = "http://187.157.115.98:100/wcf/WcfServiceLibrary1.Json.svc/"; 
+                  //urlWcf = "http://localhost:8732/Design_Time_Addresses/WcfServiceLibrary1/Json/"; 
                   // alert("TELMEX 98.114");                  
                 }
                 if(ipServidor== "AXTEL"){
                   $("#"+ipServidor).addClass('operando');
                   urlDOM = "http://189.203.180.22:80/";
-                  //urlWcf = "http://189.203.180.22:100/wcf/WcfServiceLibrary1.Json.svc/"; 
-                  urlWcf = "http://localhost:8732/Design_Time_Addresses/WcfServiceLibrary1/Json/"; 
+                  urlWcf = "http://189.203.180.22:100/wcf/WcfServiceLibrary1.Json.svc/"; 
+                  //urlWcf = "http://localhost:8732/Design_Time_Addresses/WcfServiceLibrary1/Json/"; 
                   // alert("AXTEL 180.22");                  
                 }
               }
