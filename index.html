@@ -1,0 +1,897 @@
+﻿<html>
+<head>
+	<meta charset="utf-8">
+	<title>HalcoNET App</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">    	
+    <script type="text/javascript" src="cordova.js"></script>
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />   
+	<link rel="stylesheet" href="scripts/jquery-ui.min.css">
+    <link rel="stylesheet" href="css/APP.css" />
+    <link rel="stylesheet" href="css/estilosV2.css" />
+
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
+    <script type="text/javascript" src="scripts/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="scripts/datePicker.js"></script>
+   
+	<script type="text/javascript" src="js/Jactions.js"></script>
+    <script type="text/javascript" src="js/reparto.js"></script>
+    <script type="text/javascript" src="js/llamadas.js"></script>
+    <script type="text/javascript" src="js/visitas.js"></script>
+    <!-- mapa -->
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+    <script type="text/javascript" src="jquery/gmaps.js"></script>
+    <script type="text/javascript" src="jquery/prettify.js"></script>
+	<link rel="stylesheet" href="font-awesome-4.5.0/css/font-awesome.min.css">
+	
+<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+	<!--reloj fecha -->
+	<link rel="stylesheet" href="css/reloj.css" />
+    <script type="text/javascript">
+
+          var online = false;
+          var devceid;
+          //document.addEventListener("deviceready", onDeviceReady, false);
+          document.addEventListener("backbutton", handleBackButton, true);   
+          function handleBackButton() {
+              if ($.mobile.activePage.attr('id') == 'home') {
+                  navigator.app.exitApp();
+              } 
+          }
+
+          document.addEventListener("deviceready", onDeviceReady, false);          
+          function onDeviceReady() {
+              pictureSource=navigator.camera.PictureSourceType;
+        	  destinationType=navigator.camera.DestinationType;
+              var Ident = "";
+              Ident = device.uuid;
+              var ID = localStorage.getItem('ID');
+              // alert(Ident+" - id "+ID);
+              if (ID != Ident) {
+                  $.mobile.changePage("login.html", {
+                      reloadPage: true,
+                      transition: "slide"
+                  });
+              }
+              else{
+                MuestraRepartidor();
+              }
+        
+              var ipServidor = window.localStorage.getItem("IPServidor");
+              if(ipServidor == null || ipServidor ==""){
+                $("#"+ipServidor).addClass('operando');
+                urlDOM = "http://187.157.115.98:80/";
+                //urlWcf = "http://187.157.115.98:100/wcf/WcfServiceLibrary1.Json.svc/"; 
+                urlWcf = "http://localhost:8732/Design_Time_Addresses/WcfServiceLibrary1/Json/"; 
+                // alert("180.22");
+              }
+              else{
+                if(ipServidor == "TELMEX"){
+                  $("#"+ipServidor).addClass('operando');
+                  urlDOM = "http://187.157.115.98:80/"; 
+                  //urlWcf = "http://187.157.115.98:100/wcf/WcfServiceLibrary1.Json.svc/"; 
+                  urlWcf = "http://localhost:8732/Design_Time_Addresses/WcfServiceLibrary1/Json/"; 
+                  // alert("TELMEX 98.114");                  
+                }
+                if(ipServidor== "AXTEL"){
+                  $("#"+ipServidor).addClass('operando');
+                  urlDOM = "http://189.203.180.22:80/";
+                  //urlWcf = "http://189.203.180.22:100/wcf/WcfServiceLibrary1.Json.svc/"; 
+                  urlWcf = "http://localhost:8732/Design_Time_Addresses/WcfServiceLibrary1/Json/"; 
+                  // alert("AXTEL 180.22");                  
+                }
+              }
+          }
+      $(document).delegate(".ui-content", "scrollstart", false);
+      $(function(){
+          //clic en un enlace de la lista
+          $('body').on('click', '.ancla', function() {
+
+              var strAncla=$(this).attr('href');
+              var titleF=$(this).attr('title');
+
+              $('body,html').stop(true,true).animate({
+                  scrollTop: $(strAncla).offset().top
+              },1000);
+
+              $('#numFacturaR').val(titleF);
+          });
+      });
+	  
+	function openNav() {
+		$('#transbox').addClass("oscurecer")
+		document.getElementById("mySidenav").style.display = "block";
+	}
+
+	function closeNav() {
+		$('#transbox').removeClass("oscurecer")
+		document.getElementById("mySidenav").style.display = "none";
+	}
+</script>
+<script type="text/javascript" charset="utf-8">
+    var pictureSource;   // picture source
+    var destinationType; // sets the format of returned value
+
+    function onPhotoDataSuccess(imageData) {
+      // Uncomment to view the base64-encoded image data
+      
+      var smallImage = document.getElementById('smallImage');
+      smallImage.style.display = 'block';
+      smallImage.src = "data:image/jpeg;base64," + imageData;
+      document.getElementById("smallImage").innerHTML = imageData;
+	  //alert("data:image/jpeg;base64," + imageData);
+    }
+    function onPhotoURISuccess(imageURI) {
+      //alert(imageURI);
+      var largeImage = document.getElementById('smallImage');
+      largeImage.style.display = 'block';
+      largeImage.src = imageURI;
+    }
+    function capturePhoto() {
+      // Take picture using device camera and retrieve image as base64-encoded string
+      navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality : 100,
+			destinationType : Camera.DestinationType.FILE_URI,
+			sourceType : Camera.PictureSourceType.CAMERA,
+			encodingType: Camera.EncodingType.JPEG,
+			targetWidth: 100,
+			targetHeight: 100
+		});
+    }
+    function capturePhotoEdit() {
+      // Take picture using device camera, allow edit, and retrieve image as base64-encoded string
+      navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 20, allowEdit: true,
+        destinationType: destinationType.FILE_URI,
+		saveToPhotoAlbum : true,
+		});
+    }	
+	function getPhoto2(source) {
+      // Retrieve image file location from specified source
+      navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 70,
+        destinationType: destinationType.FILE_URI,
+			encodingType: Camera.EncodingType.JPEG,
+			targetWidth: 600,
+			targetHeight: 600,
+        	sourceType: source 
+		});
+    }
+    function onFail(message) {
+      alert('Failed because: ' + message);
+    }
+
+	function EnviarFotoV(){		
+		$.mobile.loading("hide");
+		$.mobile.loading('show', {
+			text: 'Calculando...',
+			textVisible: true,
+			theme: 'a',
+			html: ""
+		});
+		var path = $('#smallImage').attr('src')
+		var base64 = getBase64Image(document.getElementById("smallImage"))	
+		var claveEntidad =window.localStorage.getItem('IDUS')
+		var imgData = JSON.stringify(getBase64Image(document.getElementById("smallImage")) );
+		
+		//$('#logs').html(imgData.substring(1, $('#longitud').val()))
+		$('#taman').val(imgData.length)
+		var inc = parseInt($('#longitud').val())
+		  var inicio = 1;   
+		  var fin = inc
+		  var env = true
+		  var i = imgData.length/inc
+		  for(var j =0;j<i+1;j++){
+				$.ajax({
+				  url: urlWcf + "RegistrarFotoCompetencia",
+				  data: { foto: imgData.substring(inicio-1, fin), claveEntidad : 1, ext: '.jpg' , marca: 'marca' , nombreA : j },
+				  type: "GET",
+				  timeout:30000,  // tiempo de espera de la llamada
+				  contentType: "application/json; charset=utf-8",
+				  dataType: "jsonp",
+				  success: function (data) {
+				  console.log('a')
+				  }
+				});
+				$('#logs').html( $('#logs').html()+' '+inicio+' ' +fin+ ' '+imgData.substring(inicio-1, fin)+ '<br> ' )
+				inicio += inc
+				fin += inc
+
+				if(fin > imgData.length)
+				  fin = imgData.length
+			
+		   } 
+		navigator.notification.alert('Guardado correctamente',
+		alertDismissed, 'HalcoNet', 'Aceptar');
+		$('#logs').html( '')
+		$.mobile.loading("hide");
+	}
+	function getBase64Image(img) {
+	  var canvas = document.createElement("canvas");
+	  canvas.width = img.width;
+	  canvas.height = img.height;
+	  var ctx = canvas.getContext("2d");
+	  ctx.drawImage(img, 0, 0);
+	  var dataURL = canvas.toDataURL("image/png");
+	  return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+	}
+	
+	function longitud()
+	{
+		 $.ajax({
+			  url: urlWcf + "Longitud",
+			  type: "GET",
+			  timeout:50000,  // tiempo de espera de la llamada
+			  contentType: "application/json; charset=utf-8",
+			  dataType: "jsonp",
+			  success: function (data) {
+				$('#longitud').val(data);
+			  },
+			 error: function (xhr, ajaxOptions, thrownError) {
+				alert(xhr.status);
+				alert(thrownError);
+			  }
+			});
+	}
+	function email(){
+		/*var link = “mailto: destinatario@loquesea.com”
+		var to=” destinatario@loquesea.com“;
+		var subj=”?subject= Asunto del email”;
+		var bod=”&body= Mensaje del email”;
+		window.location.href = “mailto:”+to+subj+bod;*/
+		cordova.plugins.email.open({
+			to:      'alan.torres@tractozone.com.mx',
+			//cc:      'erika@mustermann.de',
+			//bcc:     ['john@doe.com', 'jane@doe.com'],
+			subject: 'Saludos',
+			body:    'How are you? Nice greetings from Leipzig'
+		});
+	}
+    </script>
+</head>
+<body style="background-color:#fff;">
+  <div id="mySidenav" class="sidenav">
+	  <div id="profile">
+        <a href="#caratula"><div id="imagenLogo"></div></a>
+        <div id="nombreUsuario"></div>
+      </div>
+      <ul>
+        <li ><a href="#home" id="catalogo" class="opcionMenu" style="display:block;"><i class="fa fa-barcode fa-lg"></i> Artículos</a></li>
+        <li><a href="#consultaReparto" class="opcionMenu" id="consultaRep" style="display:none"><i class="fa fa-map-signs fa-lg"></i> Rutas</a></li>
+        <li><a href="#clientes" class="opcionMenu" id="coordenadas" style="display:none"><i class="fa fa-map-marker fa-lg"></i> Clientes</a></li>
+        <li><a href="#reparto" class="opcionMenu" id="entregaReparto" style="display:none"><i class="fa fa-motorcycle fa-lg"></i> Reparto</a></li>
+        <li><a href="#llamadas" class="opcionMenu" id="hacerLlamadas" style="display:none"><i class="fa fa-phone fa-lg"></i> Llamadas</a></li>
+        <li><a href="#Inventarios1" class="opcionMenu" id="ventasP" style="display:none"><i class="fa fa-thumbs-o-down fa-lg"></i> Ventas </a></li>
+        <li><a href="#entregas" class="opcionMenu" id="entregasA" style="display:none"><i class="fa fa-list-alt fa-lg"></i> Ordenes </a></li>
+        <li><a href="#entregasO" id="entregasB" class="opcionMenu" style="display:none"><i class="fa fa-list-alt fa-lg"></i> Ordenes Surtidas </a></li>
+        <li><a href="#directorioV" id="direcrtorioVentas" class="opcionMenu" style="display:none"><i class="fa fa-book fa-lg"></i> Directorio </a></li>
+        <li><a href="#visitasV" id="visitasClientes" class="opcionMenu" style="display:none"><i class="fa fa-users fa-lg"></i> Vistitas </a></li>
+        <li><a href="#fotosV" id="fotosVentas" class="opcionMenu" style="display:none"><i class="fa fa-camera fa-lg"></i> Fotos </a></li>
+        <li><a href="#itinerarioV" id="opcItinerario" class="opcionMenu" style="display:block"><i class="fa fa-users fa-lg"></i> Itinerario </a></li>
+      </ul>
+</div>
+
+<div id="transbox" class="">
+<div data-role="page" id="caratula" style="top: 0px!important;position: absolute;" >
+      <div data-role="header" data-position="inline" data-theme="P"> 
+        <a href="#" onclick="openNav()" class="btnMenu" ><i class="fa fa-bars fa-lg"></i></a>
+        <h1>HALCONET</h1>       
+        <a href="#" id="btnSalir" class="ui-btn-right ui-btn ui-btn-inline btnSalir" ><i class="fa fa-power-off fa-lg"></i></a>
+      </div>
+      <div   class="divContenido paginaActiva">          
+          <div>
+              <img id="logo" src="img/halconet_logo.png">
+          </div>
+      </div>  
+  </div>
+<!---------------------------------------------------------------------------- CATALOGO-->
+  <div data-role="page" id="home" style="top: 0px!important;position: absolute;" >
+      <div data-role="header" data-position="inline" data-theme="P"> 
+          <a href="#" onclick="openNav()" class="btnMenu"><i class="fa fa-bars fa-lg"></i></a>
+          <h1>Artículos</h1>       
+          <a href="#" id="btnSalir" class="ui-btn-right ui-btn ui-btn-inline btnSalir" style="color:#fff;padding: 10px;background-color: #EF5A00"><i class="fa fa-power-off fa-lg"></i></a>
+      </div>
+      
+      <div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-collapsed="false" data-theme="b" id="catalogoProductos" class="paginaActiva">
+          <legend>Buscar</legend>
+          <label for="">Código:</label>       <!-- data-clear-btn="true" --> 
+          <input type="text"   name="txtItemCode" id="txtItemCode" />             
+          <label for="">Nombre:</label>       
+          <input type="text"  name="txtNombreArticulo" id="txtNombreArticulo" />          		
+	      <a href="index.html" data-role="button" data-icon="search" title="Buscar" data-inline="true" data-iconpos="notext" id="btnBusqArt" onclick="return false">Buscar</a>           
+		  <a href="index.html" data-role="button" data-icon="delete" title="Limpiar" data-inline="true" data-iconpos="notext" id="btnLimpArt" onclick="return false">Limpiar</a>                  
+      </div>
+      <!--CUERPO DE INFORMACION-->
+      <div id="idInformacion" style="display: block;" class="paginaActiva">
+          <div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-theme="b" style="display: none;" id="CalUtil">
+              <legend>Cálculo de Utilidad</legend> 
+              <div id="Div2" class="ui-grid-b">
+                  <div id="Div4" class="ui-block-a" style="width:50%;">
+                      <label>Pesos
+                          <input id="rbtPesos" name="R1" title="Pesos" type="radio" checked="checked" value="V1" />         
+                      </label>   
+                  </div>
+
+                  <div id="Div5" class="ui-block-b" style="width:50%;">
+                      <label>Dolares 
+                          <input id="rbtDolares" name="R1" title="Dolares" type="radio" value="V1" /> 
+                      </label>
+                  </div>
+              </div>
+
+              <div  data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-collapsed="false">
+                  <label for="textinput-5"> Precio ($):
+                      <input type="number" data-clear-btn="true" name="txtPrecio" id="txtPrecio" data-mini="true"/>
+                      <input id="btnAplicPrecio" type="button" value="Calcular Utilidad" onclick="return false"/>
+                  </label>
+
+                  <label for="textinput-5">
+                       Utilidad (%):
+                      <input type="number" data-clear-btn="true" name="txtUtilidad" id="txtUtilidad" data-mini="true"/>
+                  </label>
+                      <input id="btnAplicUtilidad" type="button" value="Calcular Precio" onclick="return false"/>
+              </div>
+          </div>
+  		<!--=================================================================================================================================== descuento -->
+          <div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-theme="b" style="display: none;" id="DescMax" >
+            <legend>Descuento Máximo</legend>     
+			<div class="radioDescuento" id="radioDescuento">
+				<div class="radioD activo" id="descuentoM">Mayoreo</div>
+				<div class="radioD " id="descuentoT">Transporte</div><div class="clear"></div>
+  			</div>  			
+  			<div class="descuentos" id="descuentoMayoreo"> </div>
+  			<div class="descuentos" id="descuentoTransporte"></div>
+          </div><!--=================================================================================================================================== descuento -->
+      
+          <div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-theme="b" style="display: none;" id="LstPrice"  >
+              <legend>Listas de precios</legend>         
+              <!-- <table data-role="table" id="tblLista0" data-mode="columntoggle" data-column-btn-text="" data-column-btn-theme="a" class="phone-compare ui-shadow table-stroke" > -->
+              <table  id="tblLista0" class="tablaPrecios" cellspacing="0">
+                  <thead>
+                      <tr>
+                          <th width=50% class="label">Lista de Precios</th>
+                          <th width=25% style="text-align:center">MXP</th>
+                          <th width=25% style="text-align:center">USD</th>
+                      </tr>
+                  </thead>
+              </table>
+              <div  id="tblLista" >            
+              </div>
+          </div>
+
+          <div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-theme="b" style="display: none;" id="LstStock">
+              <legend>Stocks</legend>
+              <table id="tblListaStock0" class="tablaPrecios" cellspacing="0">
+                  <thead>
+                      <tr>
+                          <th width=50% >Almacén</th>
+                          <th width=25% style="text-align:center">Stock</th>
+                          <th width=25% style="text-align:center">Solicitado</th>
+                      </tr>
+                  </thead>
+              </table>
+              <div  id="tblListaStock" >
+              </div>
+          </div>  
+          <div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-theme="b" style="display: none;" id="LstAlternativos">
+          <legend>Alternativos</legend>
+          <table id="tblListaAlternativos0" class="tablaPrecios" cellspacing="0">
+                  <thead>
+                      <tr>
+                          <th width=25% >Código</th>
+                          <th width=50% style="text-align:center">Descripción</th>
+                          <th width=25% style="text-align:center">Linea</th>
+                      </tr>
+                  </thead>
+           </table>
+           <div  id="tblListaAlternativos" >
+           </div>
+          </div>
+      </div>
+  </div>
+  <!---------------------------------------------------------------------------- CLIENTES -->
+  <div data-role="page" id="clientes" style="top: 0px!important;position: absolute;" >
+      <div data-role="header" data-position="inline" data-theme="P"> 
+        <a href="#" onclick="openNav()" class="btnMenu"><i class="fa fa-bars fa-lg"></i></a>
+        <h1>Registrar Cliente</h1>       
+        <a href="#" id="btnSalir" class="ui-btn-right ui-btn ui-btn-inline btnSalir" ><i class="fa fa-power-off fa-lg"></i></a>
+      </div>
+      <div   class="divContenido paginaActiva">          
+          <div id="mensajeEnvio"></div>
+          <div class="etiquetasReparto">Cliente*:</div>
+          <div class="etiquetasReparto"><input type="text" id="cliente"></div>
+          <div class="etiquetasReparto">Nombre*:</div>
+          <div class="etiquetasReparto"><input type="text" id="nombreC"></div>
+          <!-- <div class="etiquetasReparto">Nombre de la dirección*:</div>
+          <div class="etiquetasReparto"><input type="text" id="descripcionC"></div> -->
+          <div class="etiquetasReparto"><label for="descripcionC" class="">Nombre de la dirección*:</label></div>
+          <div class="etiquetasReparto">  
+            <select name="descripcionC" id="descripcionC" data-role="none" class="combos">
+              <option value="centro" >Centro de entrega primario</option>
+              <option value="centro2" >Centro de entrega secundario</option>
+              <option value="oficinas" selected="selected">Oficinas administrativas</option>
+              <option value="corporativo">Corporativo</option>
+            </select>
+          </div>
+
+          <a href="#" data-role="button" data-icon="delete" title="Limpiar" data-inline="true" data-iconpos="notext" id="btnLimpCli" onclick="return false">Limpiar</a>
+          <div class="etiquetasReparto">Coordenadas:</div>
+          <div class=""><input type="text" id="coordenadasC" DISABLED></div>
+          <div><button class="ui-btn ui-corner-all" onclick="GPS()" id="obtenerCoordenadas" ><i class="fa fa-map-marker fa-lg"> </i> Obtener Coordenadas</button></div>
+          <div><button class="ui-btn ui-corner-all" id="enviarCliente"><i class="fa fa-arrow-right fa-lg"> </i> Enviar</button></div>
+      </div>  
+  </div>
+  <!---------------------------------------------------------------------------- CONSULTAR REPARTO -->
+  <div data-role="page" id="consultaReparto" style="top: 0px!important;position: absolute;" >
+      <div data-role="header" data-position="inline" data-theme="P"> 
+        <a href="#" onclick="openNav()" class="btnMenu"><i class="fa fa-bars fa-lg"></i></a>
+        <h1>Consultar reparto</h1>       
+        <a href="#" id="btnSalir" class="ui-btn-right ui-btn ui-btn-inline btnSalir" ><i class="fa fa-power-off fa-lg"></i></a>
+      </div>
+      <div  id="registroCliente" class="divContenido paginaActiva">
+          <table>
+            <tr>
+              <td>Desde:</td>
+              <td>Hasta:</td>
+            </tr>
+             <tr>
+              <td><input type="text" id="fechaIni" class="datepicker fechas" readonly></td>
+              <td><input type="text" id="fechaFinal" class="datepicker fechas" readonly></td>
+              <td><button class="botonReparto buscarRutas"  id="verRutas" onclick="consultarClientesVendedores()"><i class="fa fa-search"></i> &nbsp;</button><div class="clear"></div></td>
+            </tr>
+          </table>
+           
+          <label style="font-weight: bold" id="fechaReparto"></label>
+          <label style="font-weight: bold" class="">RUTAS</label>
+          <table id="" class="tablaPrecios" cellspacing="0">
+              <thead>
+                  <tr>
+                      <th width=30% >Ruta</th>
+                      <th width=70% style="text-align:center">Repartidor</th>
+                  </tr>
+              </thead>
+          </table>
+
+          <div id="tablaClientesVendedor"></div>
+          <br>
+          <div id="tablaFacturasVendedor"></div>
+          
+      </div>  
+  </div>
+  <!----------------------------------------------------------------------------  REPARTO -->
+  <div data-role="page" id="reparto" style="top: 0px!important;position: absolute;" >
+      <div data-role="header" data-position="inline" data-theme="P"> 
+        <a href="#" onclick="openNav()" class="btnMenu"><i class="fa fa-bars fa-lg"></i></a>
+        <h1>Reparto</h1>       
+        <a href="#" id="btnSalir" class="ui-btn-right ui-btn ui-btn-inline btnSalir" ><i class="fa fa-power-off fa-lg"></i></a>
+      </div>
+      <div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u"  data-theme="b" style="display:none" data-collapsed="false" id="rutaRepartidor" class="paginaActiva">
+        <legend>Ruta</legend>
+        <div><button class="botonReparto"  id="obtenerRuta" onclick="consultaRuta(0);"><i class="fa fa-undo"></i> Obtener ruta</button></div>
+        <div id="contenidoRuta" style="">
+        <div><button class="botonReparto"  id="iniciarRuta" onclick="iniciarRuta();"><i class="fa fa-hourglass-start"></i> Iniciar ruta</button></div>
+        <div><button class="botonReparto"  id="mapa" onclick=""><i class="fa fa-map-o"></i> Ver mapa</button></div>
+        <div><button class="botonReparto"  id="terminarRuta" onclick="terminarRuta();"><i class="fa fa-hourglass-end"></i> Terminar ruta</button></div>
+        <table id="" class="tablaPrecios" cellspacing="0" style="padding-top:10px">
+              <thead>
+                  <tr>
+                      <th width=20% ><label class="tf1" >Num. Factura</label> </th>
+                      <th width=70% style="text-align:center"><label class="tf2" >Cliente</label></th>
+                      <th width=10% style="">Status</th>
+                      <th  style="display: none">StatusClave</th>
+                      <th  style="display: none">Edocnum</th>
+                  </tr>
+              </thead>
+          </table>
+          
+        <div id="tblListaFacturas" style="margin-bottom: 10px"> </div>
+        <!-- <div id="map"></div> -->
+        <div id="map2"></div>
+      </div>
+    </div>
+    <div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u"  data-theme="b" style="display:none" data-collapsed="false" id="registroFactura" class="paginaActiva">
+      <div id="ancla"></div>
+      <legend>Registrar factura</legend>
+      <div class="etiquetasReparto">Número factura:</div>
+      <div class="etiquetasReparto"><input type="text" id="numFacturaR"></div>
+      <div><button class="ui-btn ui-corner-all" onclick="LeerQr()" ><i class="fa fa-qrcode"></i> Escanear QR</button></div>
+      
+      <div class="etiquetasReparto ">Estado:</div>
+      <div id="radiosStatus"> </div>
+      <div><button class="ui-btn ui-corner-all " id="enviarReparto"><i class="fa fa-arrow-right fa-lg"></i> Enviar</button></div> 
+
+    <a href="#rutaRepartidor" class="ancla" style="padding:10px;"><i class="fa fa-list"></i> Ver facturas</a>
+      
+    </div>
+    <div class="clear"></div>
+    <div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u"  data-theme="b" style="display:none" data-collapsed="false" id="registroComida" class="paginaActiva">
+      <legend>Registrar comida</legend>
+      <div style="height: 50px;">
+        <div><button class="botonReparto"  id="iniciarComida" onclick="iniciarComida();"><i class="fa fa-hourglass-start"></i> Iniciar comida</button></div>
+        <div><button class="botonReparto"  id="terminarComida" onclick="terminarComida();"><i class="fa fa-hourglass-end"></i> Terminar comida</button></div>
+      </div>
+    </div>
+    
+  </div>
+  <!---------------------------------------------------------------------------- LLAMADAS -->
+  <div data-role="page" id="llamadas" style="top: 0px!important;position: absolute;" >
+    <div data-role="header" data-position="inline" data-theme="P"> 
+        <a href="#" onclick="openNav()" class="btnMenu"><i class="fa fa-bars fa-lg"></i></a>
+        <h1>Llamadas</h1>       
+        <a href="#" id="btnSalir" class="ui-btn-right ui-btn ui-btn-inline btnSalir" ><i class="fa fa-power-off fa-lg"></i></a>
+      </div>
+    <div id="divLlamadas" class="divContenido paginaActiva">
+      
+          <div class="etiquetasReparto">Cliente:</div>
+          <div class="etiquetasReparto"><input type="text" id="clienteL"></div>
+          <div class="etiquetasReparto">Nombre:</div>
+          <div class="etiquetasReparto"><input type="text" id="nombreCL"></div>
+          <a href="#" data-role="button" data-icon="search" title="Buscar" data-inline="true" data-iconpos="notext" id="buscarCliente" onclick="return false">Buscar</a>           
+          <a href="#" data-role="button" data-icon="delete" title="Limpiar" data-inline="true" data-iconpos="notext" id="limpiarCampos" onclick="return false">Limpiar</a>  
+          <div id="telefonos" ></div>
+          
+          <div style="display:none" id="HI"></div>
+          <div style="display:none" id="HF"></div>
+      </div>
+    </div>  
+  <!-- llamadas    -->
+  <!---------------------------------------------------------------------------- CONFIRMAR VENTAS -->
+  <div data-role="page" id="Inventarios1" style="top: 0px!important;position: absolute;" >
+        <!-- REGISTRO DE VENTAS PERDIDAS Y VENTA CONFIRMADA   -->
+        <div data-role="header" data-position="inline" data-theme="P">
+            <a href="#" onclick="openNav()" class="btnMenu"><i class="fa fa-bars fa-lg"></i></a>
+            <h1>Venta perdida/confirmada</h1>
+            <a href="#" id="btnSalir" class="ui-btn-right ui-btn ui-btn-inline btnSalir" ><i class="fa fa-power-off fa-lg"></i></a>
+        </div>
+        <div id="" class="divContenido paginaActiva">
+
+            <div id="divSeccionI1">
+                <p>¿Qué deseas registrar?</p>
+                <div id="Div2" class="ui-grid-b">
+
+                    <div id="Div4" class="ui-block-a" style="width:50%;">
+                        <label>
+                            Venta perdida
+                            <input id="rbtVtaPerdida" name="R1" type="radio" checked="checked" value="V1" />
+                        </label>
+                    </div>
+
+                    <div id="Div5" class="ui-block-b" style="width:50%;">
+                        <label>
+                            Venta confirmada
+                            <input id="rbtStockFaltante" name="R1" type="radio" value="V1" />
+                        </label>
+                    </div>
+                </div>
+                <a href="#" class="ui-btn ui-shadow" id="btnContinuarI1">Continuar</a>
+            </div>
+
+            <div id="divSeccionI2">
+                <div id="ventaperdida">
+
+                    <div class="etiquetasReparto">Artículo:</div>
+                    <div class="etiquetasReparto"><input type="text" id="txtArticuloI1"></div>
+                    <!--<div class="etiquetasReparto">Descripción:</div>
+                    <div class="etiquetasReparto"><input type="text" id="txtDscripcionI1"></div>-->
+
+                    <div class="etiquetasReparto">Cliente:</div>
+                    <div class="etiquetasReparto"><input type="text" id="txtClienteI1"></div>
+                    <div class="etiquetasReparto">Nombre:</div>
+                    <div class="etiquetasReparto"><input type="text" id="txtNombreI1"></div>
+
+                    <label for="text-3">Cantidad</label>
+                    <input type="number" data-clear-btn="true" name="text-3" id="cantidadI1" value="">
+                    <label for="datetime-4">Fecha/Hora</label>
+                    <input type="text" name="basic_example_1" id="basic_example_1" value="" readonly />
+                </div>   
+                <div id="ventaconfirmada">
+                    <div class="etiquetasReparto">Artículo:</div>
+                    <div class="etiquetasReparto"><input type="text" id="txtArticuloI2"></div>
+					
+					<div class="etiquetasReparto">Cliente:</div>
+                    <div class="etiquetasReparto"><input type="text" id="txtClienteI2"></div>
+                    <div class="etiquetasReparto">Nombre:</div>
+                    <div class="etiquetasReparto"><input type="text" id="txtNombreI2"></div>
+                    <form>
+                        <div class="ui-field-contain">
+                            <label for="select-native-2">Origen</label>
+                            <select name="select-native-2" id="select_Origen" data-mini="true" style="max-width:100%; width:100%;">
+                                <option value='03'>APIZACO</option>
+                                <option value='27'>CEDIS PUEBLA</option>
+                                <option value='05'>CORDOBA</option>
+                                <option value='16'>EDOMEX</option>
+                                <option value='18'>GUADALAJARA</option>
+                                <option value='02'>MONTERREY</option>
+                                <option value='30'>NUEVO LAREDO</option>
+                                <option value='01'>PUEBLA</option>
+                                <option value='23'>SALTILLO</option>
+                                <option value='06'>TEPEACA</option>
+                            </select>
+                        </div>
+                        <div class="ui-field-contain">
+                            <label for="select-native-2">Destino</label>
+                            <select name="select-native-2" id="select_Destino" data-mini="true" style="max-width:100%; width:100%;">
+                                <option value='03'>APIZACO</option>
+                                <option value='27'>CEDIS PUEBLA</option>
+                                <option value='05'>CORDOBA</option>
+                                <option value='16'>EDOMEX</option>
+                                <option value='18'>GUADALAJARA</option>
+                                <option value='02'>MONTERREY</option>
+                                <option value='30'>NUEVO LAREDO</option>
+                                <option value='01'>PUEBLA</option>
+                                <option value='23'>SALTILLO</option>
+                                <option value='06'>TEPEACA</option>
+                            </select>
+                        </div>
+						<div style="clear:both"></div>
+						<button class="botonReparto"  id="verStocks" ><i class="fa fa-arrow-down"></i> Ver stocks</button>
+						<div style="clear:both"></div>
+						<div id="divStocks" style="display:none">
+							<table id="tblListaStock0" class="tablaPrecios" cellspacing="0">
+							      <thead>
+							          <tr>
+							              <th width=50% >Almacén</th>
+							              <th width=25% style="text-align:center">Stock</th>
+							              <th width=25% style="text-align:center">Solicitado</th>
+							          </tr>
+							      </thead>
+							</table>
+							<div  id="tblListaStockVenta" >
+							</div>
+						</div>
+						<br>
+						<div style="clear:both"></div>
+                        <label for="text-3">Cantidad</label>
+                        <input type="number" data-clear-btn="true" name="text-3" id="cantidadI2" value="">
+
+                        <label for="datetime-4">Fecha/Hora</label>
+                        <input type="text" name="basic_example_1" id="input_example_2" value="" readonly />
+                    </form>
+                   
+                </div>  
+                <div data-role="navbar">
+                    <ul>
+                        <li id="backI1"><a href="#">Regresar</a></li>
+                        <li id="saveI1"><a href="#" onclick="guardarVenta();" class="ui-btn-active">Guardar</a></li>
+                    </ul>
+                </div>
+            
+            <div style="display:none" id="HI"></div>
+            <div style="display:none" id="HF"></div>
+            </div>
+		</div>    
+    </div>    
+
+  <!---------------------------------------------------------------------------- ORDENES DE  VENTAS -->
+  <div data-role="page" id="entregas" style="top: 0px!important;position: absolute;" >
+        <div data-role="header" data-position="inline" data-theme="P"> 
+          <a href="#" onclick="openNav()" class="btnMenu"><i class="fa fa-bars fa-lg"></i></a>
+          <h1>Entregas</h1>       
+          <a href="#" id="btnSalir" class="ui-btn-right ui-btn ui-btn-inline btnSalir" ><i class="fa fa-power-off fa-lg"></i></a>
+        </div>
+        <div class="paginaActiva">
+			<button class="botonReparto"  id="btnConsultaOrdenes" style="margin-bottom: 10px!important;"><i class="fa fa-list-alt"></i> Consultar</button>
+			<button class="botonReparto"  id="btnRegresar" style="margin-bottom: 10px!important;display: none"><i class="fa fa-arrow-left"></i> Regresar</button>
+        	<button class="botonReparto"  id="btnSuspender" onclick="suspenderTiempo()"style="margin-bottom: 10px!important;display: none"><i class="fa fa-clock-o"></i> Suspender</button>
+			<img src="img/loader.gif" id="loader" style="display:none">  
+			<div class="divContenido paginaActiva" id="ListOrdenes">            
+				 <div style="clear:both;"></div>
+				<div id="divTblOrdenes"></div>
+				<!--<a href="#" class="enlaceOrden"><div class="cuadroOrden">
+				  <div class="cuadroCardCode">95159</div>
+				  <div class="cuadroSuperior"></div>
+				  <div class="cuadroInferior"><div class="divCardName"> A 006 <br> SISTEMA OPERADOR DE LOS SERVICIOS DE AGUA POTABLE Y ALCANTARILLADO DEL MUNICIPIO DE TEPEACA DE NEGRE</div></div>
+				</div></a> -->
+			</div>
+			<div class="divContenido paginaActiva" id="ListDetalleOrden" style="margin-bottom: 10px!important;display: none">
+			  <input type="text" style="display: none" id="txtDocEntry"></input>
+			  <table width="100%" class="tblEncabezadoOrden" >
+				<tr>
+				  <td width="15%" valign="top" >Cliente:</td>
+				  <td width="35%" valign="top"><label id="lblCardCode"></label></td>
+				  <td width="15%" valign="top">Orden:</td>
+				  <td width="35%" valign="top"><label id="lblDocNum"></label></td>
+				</tr>
+			  </table>
+			  <table width="100%" class="tblEncabezadoOrden" >
+				<tr>
+				  <td width="15%" valign="top">Nombre:</td>
+				  <td width="85%" valign="top"><label id="lblCardName"></label></td>
+				</tr>
+				<tr>
+				  <td valign="top">Total:</td>
+				  <td valign="top"><label id="lblDocTotal"></label></td>
+				</tr>
+			  </table>
+			  <table  id="" class="tablaPrecios" cellspacing="0">
+			      <thead>
+                  <tr>
+                      <!--<th width=15% class="label">LineNum</th>  -->
+                      <th width=30% style="text-align:center">Artículo</th>
+        <!--             <th width=25% style="text-align:center">Descripción</th>                     -->
+                    <th width=30% style="text-align:center">Línea</th>
+        <!--             <th width=15% style="text-align:center">Ubicación</th>                     -->
+                    <th width=10% style="text-align:center">Stock</th>
+                    <th width=10% style="text-align:center">Req.</th>
+                    <th width=20% style="text-align:center">Surtido</th>
+                  </tr>
+              </thead>
+			  </table>
+			  <div id="divTblDetalle"></div>
+			  <br>
+			  <button class="botonReparto"  id="" onclick="actualizarOrden()" style="margin-bottom: 20px;"><i class="fa fa-check"></i> Guardar</button>
+		  </div>
+      </div>
+		<div data-role="footer" data-position="fixed" style="text-align: center">
+			<div id="divDescripcionArtO" style="width:100%;word-wrap: break-word; "></div>
+		  </div><!-- /footer -->
+		</div>
+	<!---------------------------------------------------------------------------- ORDENES DE  VENTAS Entregadas-->
+  <div data-role="page" id="entregasO" style="top: 0px!important;position: absolute;" class="paginaActiva">
+        <div data-role="header" data-position="inline" data-theme="P"> 
+          <a href="#" onclick="openNav()" class="btnMenu"><i class="fa fa-bars fa-lg"></i></a>
+          <h1>Entregas</h1>       
+          <a href="#" id="btnSalir" class="ui-btn-right ui-btn ui-btn-inline btnSalir" ><i class="fa fa-power-off fa-lg"></i></a>
+        </div>
+        <button class="botonReparto"  id="btnConsultaOrdenesS" style="margin-bottom: 10px!important;"><i class="fa fa-list-alt"></i> Consultar</button>
+        <button class="botonReparto"  id="btnRegresarS" style="margin-bottom: 10px!important;display: none"><i class="fa fa-arrow-left"></i> Regresar</button>
+        <img src="img/loader.gif" id="loader" style="display:none">  
+        <div class="divContenido" id="ListOrdenesS">   
+             <div style="clear:both;"></div>
+            <div id="divTblOrdenesS"></div>
+        </div>
+        <div class="divContenido paginaActiva" id="ListDetalleOrdenS" style="margin-bottom: 10px!important;display: none">
+
+          <input type="text" style="display: none" id="txtDocEntryS"></input>
+          <table width="100%" class="tblEncabezadoOrden" >
+            <tr>
+              <td width="15%" valign="top" >Cliente:</td>
+              <td width="35%" valign="top"><label id="lblCardCodeS"></label></td>
+              <td width="15%" valign="top">Orden:</td>
+              <td width="35%" valign="top"><label id="lblDocNumS"></label></td>
+            </tr>
+          </table>
+          <table width="100%" class="tblEncabezadoOrden" >
+            <tr>
+              <td width="15%" valign="top">Nombre:</td>
+              <td width="85%" valign="top"><label id="lblCardNameS"></label></td>
+            </tr>
+            <tr>
+              <td valign="top">Total:</td>
+              <td valign="top"><label id="lblDocTotalS"></label></td>
+            </tr>
+          </table>
+          <label>Num. factura</label>
+          <input id="numFacturaS" ></input>
+          <button class="botonReparto"  id="" onclick="LeerQrOrden()" style="margin-bottom: 20px;"><i class="fa fa-qrcode"></i> Escanear</button>
+          <button class="botonReparto"  id="btnGuardarFacturaS" onclick="guardarFacturaS()" style="margin-bottom: 20px;"><i class="fa fa-plus"></i> Factura</button>
+          <button class="botonReparto"  id="btnGuardarOrdenS" onclick="entregarOrdenS()" style="margin-bottom: 20px;border:1px solid green"><i class="fa fa-check"></i> Entregar</button>
+          <table  id="" class="tablaPrecios" cellspacing="0">
+              <thead>
+                  <tr>
+                      <!--<th width=15% class="label">LineNum</th>  -->
+                      <th width=20% style="text-align:center">Artículo</th>
+                    <th width=25% style="text-align:center">Descripción</th>                    
+                    <th width=10% style="text-align:center">Línea</th>
+                    <th width=10% style="text-align:center">Solicitado</th>
+                    <th width=10% style="text-align:center">Surtido</th>
+                  </tr>
+              </thead>
+          </table>
+          <div id="divTblDetalleS"></div>
+          <br>
+      </div>
+  </div> 
+<!---------------------------------------------------------------------------- Visitas CLIENTES -->
+  <div data-role="page" id="visitasV" style="top: 0px!important;position: absolute;" >
+      <div data-role="header" data-position="inline" data-theme="P"> 
+        <a href="#" onclick="openNav()" class="btnMenu"><i class="fa fa-bars fa-lg"></i></a>
+        <h1>Registrar Visita</h1>       
+        <a href="#" id="btnSalir" class="ui-btn-right ui-btn ui-btn-inline btnSalir" ><i class="fa fa-power-off fa-lg"></i></a>
+      </div>
+      <div class="divContenido paginaActiva">
+        <input type="hidden" id="usuarioV" />
+        <div id="mensajeEnvio"></div>
+        <div class="etiquetasReparto">Cliente</div>
+        <input type="text" id="clienteV">
+        <div class="etiquetasReparto">Nombre</div>
+        <div class="etiquetasReparto"><input type="text" id="nombreCV"></div>
+
+        <a href="#" data-role="button" data-icon="delete" title="Limpiar" data-inline="true" data-iconpos="notext" id="btnLimpCliV" onclick="return false">Limpiar</a>
+        <div><button class="ui-btn ui-corner-all" onclick="enviarClienteV()"  id="enviarClienteV"><i class="fa fa-arrow-right fa-lg"> </i> Enviar</button></div>
+      </div>
+  </div>
+<!---------------------------------------------------------------------------- Visitas CLIENTES -->
+<!---------------------------------------------------------------------------- Directorio -->
+  <div data-role="page" id="directorioV" style="top: 0px!important;position: absolute;" >
+    <div data-role="header" data-position="inline" data-theme="P"> 
+        <a href="#" onclick="openNav()" class="btnMenu"><i class="fa fa-bars fa-lg"></i></a>
+        <h1>Directorio</h1>       
+        <a href="#" id="btnSalir" class="ui-btn-right ui-btn ui-btn-inline btnSalir" ><i class="fa fa-power-off fa-lg"></i></a>
+      </div>
+      <div class="divContenido paginaActiva">      
+          <div class="etiquetasReparto">Cliente:</div>
+          <div class="etiquetasReparto"><input type="text" id="clienteD"></div>
+          <div class="etiquetasReparto">Nombre:</div>
+          <div class="etiquetasReparto"><input type="text" id="nombreCD"></div>
+          <a href="#" data-role="button" data-icon="search" title="Buscar" data-inline="true" data-iconpos="notext" id="buscarClienteD" onclick="return false">Buscar</a>           
+          <a href="#" data-role="button" data-icon="delete" title="Limpiar" data-inline="true" data-iconpos="notext" id="limpiarCamposD" onclick="return false">Limpiar</a>  
+          <div id="telefonosD" ></div>
+          
+          <div style="display:none" id="HID"></div>
+          <div style="display:none" id="HFD"></div>
+      </div>
+    </div>  
+  <!-- Directorio    -->
+	<!-- fotos    -->
+	<div data-role="page" id="fotosV" >
+	  <div data-role="header" data-position="inline" data-theme="P"> 
+        <a href="#" onclick="openNav()" class="btnMenu"><i class="fa fa-bars fa-lg"></i></a>
+        <h1>Reportar precios</h1>       
+        <a href="#" id="btnSalir" class="ui-btn-right ui-btn ui-btn-inline btnSalir" ><i class="fa fa-power-off fa-lg"></i></a>
+      </div>
+	  <div class="divContenido paginaActiva">
+		  <button class="ui-btn ui-corner-all" onclick="longitud()"  id="enviarFotoV">longitud</button>	
+          <input type="text" id="longitud">
+		  <input type="text" id="taman">
+		  <a id="img" href="" onclick="capturePhoto();">
+			  <center><i class="fa fa-camera fa-lg"></i></center>
+		  </a>
+		  <a id="img" href="" onclick="getPhoto2(pictureSource.PHOTOLIBRARY);">
+		  	  <center><i class="fa fa-picture-o fa-lg"></i></center>
+			</a>
+		<center><img style="display:block;width:250px;height:250px;" id="smallImage" src="" /></center>
+        <div><button class="ui-btn ui-corner-all" onclick="EnviarFotoV()"  id="enviarFotoV"><i class="fa fa-arrow-right fa-lg"> </i> Enviar</button></div>
+		  <div id="logs"></div>
+	  </div>
+	</div>
+	<!-- fotos    -->
+	<!-- itinerario    -->
+  <div data-role="page" id="itinerarioV"  class="paginaActiva">
+    <div data-role="header" data-position="inline" data-theme="P"> 
+        <a href="#" onclick="openNav()" style="color:#fff;padding: 10px;background-color: #EF5A00"><i class="fa fa-bars fa-lg"></i></a>
+        <h1>Itinerario</h1>       
+        <a href="#" id="btnSalir" class="ui-btn-right ui-btn ui-btn-inline btnSalir" style="color:#fff;padding: 10px;background-color: #EF5A00"><i class="fa fa-power-off fa-lg"></i></a>
+    </div>
+    <div role="main" class="ui-content">
+        <div data-role="tabs" id="tabs">
+  <div data-role="navbar">
+    <ul>
+      <li><a href="#uno" data-ajax="false">Sugeridos</a></li>
+      <li><a href="#dos" data-ajax="false">Planear</a></li>
+      <li><a href="#tres" data-ajax="false">Planeados</a></li>
+    </ul>
+  </div>
+  <div id="uno" class="ui-body-d ui-content">
+     <button class="botonReparto"  id="" onclick="consultaItinerarioSugerido()" style="margin-bottom: 20px;"><i class="fa fa-refresh"></i> Consultar</button>
+      <div class="clear"></div>
+      <table class="tablaPrecios" cellspacing="0"><tr>
+      <th width="40%">Cliente</th>
+      </tr></table>
+      <div id="divClientesVisitas"></div>
+  </div>
+  <div id="dos">
+     <button class="botonReparto"  id="" onclick="consultaItinerarioCompleto()" style="margin-bottom: 20px;"><i class="fa fa-refresh"></i> Consultar</button>
+      <div class="clear"></div>
+      <table class="tablaPrecios" cellspacing="0"><tr>
+      <th width="50%">Cliente</th>
+      <th width="50%">Seleccionar</th>
+      </tr></table>
+      <div id="divClientesVisitasCompleto"></div>
+  </div>
+  <div id="tres" class="ui-body-d ui-content">
+     <button class="botonReparto"  id="" onclick="consultaItinerario()" style="margin-bottom: 20px;"><i class="fa fa-refresh"></i> Consultar</button>
+      <div class="clear"></div>
+      <table class="tablaPrecios" cellspacing="0"><tr>
+      <th width="40%">Cliente</th>
+      <th width="40%">Estado</th>
+      <th width="20%">Visitar</th>
+      </tr></table>
+      <div id="divClientesVisitasPlaneado"></div>
+  </div>
+</div>
+  </div>
+  </div>
+  <!-- itinerario    -->
+  </div> 
+</body>
+    
+</html>

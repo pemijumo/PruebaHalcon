@@ -1,0 +1,70 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>HalcoNET App</title>
+     
+    <meta name="viewport" content="width=device-width, initial-scale=1">     	
+    <script type="text/javascript" src="cordova.js"></script>
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />   
+	<link rel="stylesheet" href="scripts/jquery-ui.min.css">
+    <link rel="stylesheet" href="css/APP.css" />
+    <link rel="stylesheet" href="css/estilosV2.css" />
+
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
+    <script type="text/javascript" src="scripts/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="scripts/datePicker.js"></script>
+   
+	<script type="text/javascript" src="js/Jactions.js"></script>
+    <!-- mapa -->
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+    <script type="text/javascript" src="jquery/gmaps.js"></script>
+    <script type="text/javascript" src="jquery/prettify.js"></script>
+	<link rel="stylesheet" href="font-awesome-4.5.0/css/font-awesome.min.css">
+      <script type="text/javascript">
+          
+          document.addEventListener("backbutton", handleBackButton, true);
+                   
+          function handleBackButton() {
+
+              if ($.mobile.activePage.attr('id') == 'inicio' || $.mobile.activePage.attr('id') == 'home') {
+                  navigator.app.exitApp();
+              }
+              //else {
+              //    navigator.app.backHistory();
+              //}          
+          }
+
+        </script>
+</head>
+<body style="background-color:#fff">
+    <div data-role="page" id="inicio" style="" class="paginaActiva">
+        <div data-role="header"  data-position="inline" data-theme="">
+      		<h1 class="ui-EncabText">Acceso HalcoNet</h1>
+            <!-- <a href="#" id="btnLogout" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right ui-icon-delete" style="background-color:#EF5A00; text-shadow:none;color:fff">Salir&nbsp;</a> -->
+            <a href="#" id="btnLogout" class="ui-btn-right ui-btn ui-btn-inline btnMenu"  ><i class="fa fa-times fa-lg"></i></a>
+      	</div>
+      	<div data-role="content">	
+          <div>
+              <img id="logo" src="img/halconet_logo.png">
+          </div>
+      		<form id="formulario" >          
+          		<label> Usuario </label>
+          		<input type="text" id="nombredeusuario" name="nombredeusuario">          
+          		<label> Password </label>
+         			<input type="password" id="clave" name="clave" >
+          		<input type="submit" value="Iniciar sesión" id="botonLogin">  
+
+          	</form>		
+            <a href="#" id="configura" ><i class="fa fa-sitemap" aria-hidden="true"></i></a>    
+
+              <div style="display:none;margin-top:5px " id="divConfigura">
+                <div class="botonConfigura" id="TELMEX" style="">IP 115.98</div>
+                <div class="botonConfigura" id="AXTEL" style="">IP 180.22</div>
+              </div>
+      	</div>
+    </div>  
+    
+
+</body>
+</html>

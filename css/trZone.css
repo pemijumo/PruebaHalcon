@@ -1,0 +1,66 @@
+.ui-panel-animate.ui-panel-page-content-position-left {
+    left: 0;
+    right: 0;
+    transform: translate3d(8em, 0px, 0px)!important;
+}
+.abrir {
+    left: 0;
+    right: 0;
+    transform: translate3d(8em, 0px, 0px)!important;
+}
+
+.ui-panel {
+    width: 8em!important;
+}
+/* cambio de color de cabecera */
+/*.ui-bar-a, .ui-page-theme-a .ui-bar-inherit, html .ui-bar-a .ui-bar-inherit, html .ui-body-a .ui-bar-inherit, html body .ui-group-theme-a .ui-bar-inherit {
+    background-color: #73879c!important;
+    border-color: #ddd;
+    color: #333;
+    font-weight: 700;
+    text-shadow: 0 1px 0 #eee;
+}*/
+
+.ui-bar-a {
+    background: #fff /* linear-gradient(#F8AC4F, #F8AC4F) repeat scroll 0 0 */!important;
+    border: 1px solid #a3b2d2;
+    color: #000;
+    font-weight: bold;
+    text-shadow:none!important;
+}
+input.ui-input-text, textarea.ui-input-text {
+    font-size: 12px!important;
+	margin-bottom:opx!important;
+}
+.ui-body-a, .ui-overlay-a {
+    border: 0px!important;
+}
+.ui-checkbox input, .ui-radio input {
+    left: 3px!important;
+    margin: 3px 0 0!important;
+}
+
+.opciones{
+	float:left;
+	
+}
+.menuTop{
+	 height: 40px;width: 100%; overflow-x: auto;
+}
+
+.ui-btn-up-a {
+    background: #fff ;
+    border: 1px solid #fff;
+    color: #ededed;
+    font-weight: bold;
+    text-shadow: none!important;
+}
+
+.ui-widget {
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px!important;
+}
+/*.etiquetas{
+	color:#000!important;
+	font-size:12px!important;
+}*/

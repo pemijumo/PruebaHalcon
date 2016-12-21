@@ -1,0 +1,467 @@
+body{
+	font-family: lato;	
+}
+.radioD{
+	padding:5px;
+	float:left;
+	width:100px;
+	height:25px;
+	background-color:#373737;	
+	color:#fff;
+	text-align:center;
+	text-shadow:none;
+	border-radius:2px ;
+}
+
+.activo{
+	background-color:#EF5A00;
+}
+.clear{
+	clear:both;
+}
+.descuentos{
+	padding-top: 15px;
+}
+.ui-autocomplete {
+    max-height: 100px;
+	/* max-width:100%; */
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  
+.tablaPrecios{
+	width:100%;
+	font-size:13px;
+}
+.tablaPrecios th{
+  background-color:#373737;
+  color:#fff;
+  padding:5px;
+  text-shadow:none;
+}
+.precios{
+	width:100%;
+	font-size:12px;
+}
+.precios td{
+	border-bottom:1px solid #373737;
+	padding:5px;
+}
+.precios tr:hover td { background: #FE8B44; color: #339; }
+/*.ui-menu .ui-menu-item { 
+	margin: 0;
+	padding: 6px 1em 6px .4em!important;
+}*/
+
+.facturas{
+	width:100%;
+	font-size:13px;
+}
+.facturas td{
+	border-bottom:1px solid #373737;
+	padding:5px;
+}
+.facturas tr{
+	height: 40px;
+	padding:5px;
+}
+
+ #map{  /*estilo del mapa*/
+    width: 100%;
+    height: 450px;
+	
+}
+
+.estado{
+	width: 20px;
+	height: 20px;
+	border:1px solid #000;
+	margin-left: 10px;
+}
+.N{
+	background-color: #DA0000;
+}
+.S{
+	background-color: #329A05;
+}
+.I{
+	background-color: #FF7F07;
+}
+
+#map2,
+#panorama {
+	width: 100%;
+    height: 450px;
+}
+.clienteDir{
+	padding: 3px;
+	background-color: #fff;
+	word-wrap: break-word; 
+	max-width:150px; 
+	font-size: 9px;
+}
+.botonReparto{
+	width: 136px!important;
+	font-size: 12px;
+	float: left;
+	margin: 5px 5px 0px 5px;
+}
+#numFacturaR{
+	height: 50px!important;
+}
+.etiquetasReparto{
+	padding-bottom: 0px;
+}
+.radios{
+	font-size: 14px !important;
+    margin-left: 25px !important;
+    margin-top: -15px !important;
+}
+.enlaceRuta{
+	style:"width:100%";
+	padding:5px;
+}
+/*#FE8B44*/
+
+.combos{
+	width: 100%;
+	padding:8px 0px; 
+	color:#333;
+}
+
+#tablaClientesVendedor{
+	overflow-y:scroll; overflow-x:hidden;
+     height:200px;
+}
+.fechas{
+	width:100px!important;
+	font-size: 13px!important;
+}
+.buscarRutas{
+	width: 60px!important;
+	margin-top:0px;
+}
+
+.botonConfigura{
+	float: left;
+	width: 100px;
+	border:1px solid black;
+	background-color: black;
+	padding: 5px;
+	margin-left:5px;
+	color: #fff; 
+}
+.operando{
+	background-color: #EF5A00!important;
+	border:1px solid #EF5A00!important;
+}
+.llamada{
+	background-color: #21A514;
+	color: #fff;
+	box-shadow: none;
+	margin-left: 10px;
+	padding: 5PX;
+	border-radius: 5px;
+	box-shadow: none;
+	border:none;
+}
+.llamadaD{
+	background-color: #EF5A00;
+	color: #fff;
+	box-shadow: none;
+	margin-left: 10px;
+	padding: 5PX;
+	border-radius: 5px;
+	box-shadow: none;
+	border:none;
+}
+.numeroLlamada{
+	letter-spacing: 2px;
+	padding: 3px 0px 3px 10px;
+	border:none;
+}
+/*==================================================Ventas*/
+.tblOrdenes{
+	font-size: 16px;
+	text-shadow: none;	
+}
+.tblOrdenes td div{
+	padding: 5px;
+}
+.divContenido{
+	padding: 10px;
+}
+.txtSurtido{
+	width: 60px!important;
+	font-weight: bold;
+	text-align: center;
+}
+.enlaceOrden{
+	text-decoration:none;
+	font-weight:normal!important;
+}
+.cuadroOrden{
+	border:1px solid #000;
+	border-radius: 5px;
+	float: left;
+	margin-left: 10px;
+	margin-bottom: 10px;
+	background-size: 100% 100%;
+	background-repeat:no-repeat;
+	background-position: center;
+	background-size: cover;
+	background-color:#525252; 
+}
+#divTblOrdenes .RU,#divTblOrdenes .M{
+	background-image: url('../img/estrellas_app_3.jpg');
+}
+#divTblOrdenes .R {
+	background-image: url('../img/estrellas_app_2.jpg');
+}
+#divTblOrdenes .N,#divTblOrdenes OR{
+	background-image: url('../img/estrellas_app_1.jpg');
+}
+#divTblOrdenesS .RU,#divTblOrdenesS .M{
+	background-image: url('../img/estrellas_app_3.jpg');
+}
+#divTblOrdenesS .R {
+	background-image: url('../img/estrellas_app_2.jpg');
+}
+#divTblOrdenesS .N,#divTblOrdenesS OR{
+	background-image: url('../img/estrellas_app_1.jpg');
+}
+.cuadroSuperior{
+	width: 100%;
+	height: 45%;
+	font-size: 14px;
+	background-color: transparent;
+}
+.cuadroInferior{
+	width: 100%;
+	height: 55%;
+	font-size: 14px;
+	background-color: rgba(0,0,0, 0.2);
+}
+.cuadroCardCode{
+	border-radius: 5px;
+	font-size: 14px;
+	float: right;
+	width: 100px;
+	height: 30px;
+	text-align: right;
+	color: #fff;
+	text-shadow: none;
+	background-color: #EF5A00;
+	text-align: center;
+	font-weight: bold;
+}
+.divCardName{
+	padding: 5px;
+	text-align: center;
+	color: #fff;
+	text-shadow: none;
+}
+.divContenido .ui-input-text{
+	border:1px solid #f9f9f9 !important;
+}
+.remarcada {
+	background-color: #ededed;
+}
+.filaIncorrecta{
+	background-color: #f00;
+	color: #fff;
+}
+.tblEncabezadoOrden tr{
+		border: 1px solid #fff!imp
+	}
+@media (max-width: 500px) {
+  	.cuadroOrden{
+		height: 80px;
+		width: 100%;
+		margin-left: 0px;
+		background-size: contain!important;
+	}
+	.cuadroCardCode{
+		font-size: 12px;
+		width: 70px;
+		height: 20px;
+	}
+	.cuadroSuperior{
+		font-size: 10px;
+		float: left;
+		width: 50px;
+	}
+	.cuadroInferior{
+		font-size: 10px;
+		float: left;
+	}
+	#loader{
+		margin: 10px;
+		margin:30px; 
+	}
+
+}
+@media (min-width: 501px) {
+  	.cuadroOrden{
+		height: 240px;
+		width: 180px;
+	}
+	.botonReparto {
+	    font-size: 16px;
+	    height: 60px;
+	    margin: 5px 5px 0;
+	    width: 150px !important;
+	}
+	.facturas tr {
+	    height: 50px;
+	}
+	.tblOrdenes {
+	    font-size: 17px;
+	}
+	.tablaPrecios {
+	    font-size: 17px;
+	}
+	.tblEncabezadoOrden{
+		font-size: 17px;
+	}
+	.tblEncabezadoOrden label{
+		font-size: 20px;
+		font-weight: bold
+	}
+	.ui-header .ui-title, .ui-footer .ui-title {
+	    font-size: 1.2em;
+	}
+
+	.slidemenu ul li a:link, .slidemenu ul li a:visited {
+	    font-size: 14px;
+	    padding: 15px 0 10px 15px;
+	}
+	.slidemenu ul li a:link, .slidemenu ul li a:visited {
+	    font-size: 15px!important;
+	}
+	#inicio label{
+		font-size: 20px;
+	}
+	.ui-input-text input, .ui-input-search input {
+	    min-height: 3.2em;
+	}
+	#botonLogin{
+		font-size: 20px;
+	}
+	#loader{
+		width: 50px;
+		margin: 10px;
+	}
+}
+#profile{
+}
+#profile #nombreUsuario{
+	text-shadow: none;
+	color: #fff;
+	width: 100%;
+	border-bottom: 1px solid #fff;
+	padding:  5px;
+	font-weight: bold;
+}
+#profile #imagenLogo{
+	background-color: #fff;
+	background-image: url("../img/halconet.png");
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: contain;
+	border-radius: 100px;
+	height: 100px !important;
+	width: 100px !important;
+	margin-top: 10px;
+	margin-left: 50px;
+}
+
+.sidenav {
+    display: none;
+    height: 100%;
+    width: 200px;
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    background-color: #373737;
+    overflow-x: hidden;
+    padding-top: 0px;
+}
+
+.sidenav a {
+    padding: 15px 0 10px 15px;
+    text-decoration: none;
+    font-size: 16px;
+    color: #fff;
+    display: block;
+    transition: 0.3s;
+    text-shadow: none;
+	border-bottom: 1px solid #fff;
+}
+.sidenav ul{
+	margin-left:-40px; 
+	margin-top: 0px;
+}
+.sidenav li{
+	list-style:none;
+}
+.sidenav a:hover, .offcanvas a:focus{
+    color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+.oscurecer{
+    background-color: #ffffff!important;
+    opacity: 0.5!important;
+}
+
+/*
+img{
+padding: 25px;
+}
+*/
+#main{
+margin-top: 12% !important ;
+}
+.block{
+width: 33.33%;
+float: left;
+}
+.grid{
+width: 100%;
+}
+#img{
+padding: 15% !important;
+}
+.btnMenu{
+	color:#fff!important;padding: 10px!important;background-color: #EF5A00!important;border:none!important;box-shadow:none!important;
+}
+.btnSalir{
+	color:#fff!important;padding: 10px!important;background-color: #EF5A00!important;border:none!important;
+}
+.cssVisita{
+	background-color: #EF5A00;
+	color: #fff;
+	box-shadow: none;
+	margin-left: 10px;
+	padding: 5PX;
+	border-radius: 5px;
+	box-shadow: none;
+	border:none;
+}
+.ui-tabs .ui-tabs-nav .ui-tabs-anchor {
+    float: none!important;
+}
+.ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited {
+    color: #000!important;
+}
+.ui-widget-content {
+    border: 1px solid #fff!important;
+}
