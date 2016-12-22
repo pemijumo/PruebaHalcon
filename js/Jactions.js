@@ -2,13 +2,13 @@ var CodArt = []; var NomArt = [];
 //var urlDOM = ""; var Publi = 0;
 //var urlDOM = "http://192.168.2.100:80/"; var Publi = 1;
  // var urlDOM = "http://192.168.2.204:70/"; var Publi = 1;
-var urlDOMAUX = "http://187.157.115.98:80/"; var Publi = 1;
-var urlWcfAUX = "http://187.157.115.98:100/wcf/WcfServiceLibrary1.Json.svc/"; 
+var urlDOMAUX = "http://192.168.2.100:80/"; var Publi = 1;
+var urlWcfAUX = "http://192.168.2.100:100/wcf/WcfServiceLibrary1.Json.svc/"; 
 var urlDOM    = ""; 
-var urlWcf    = "http://187.157.115.98:100/wcf/WcfServiceLibrary1.Json.svc/"; 
-//var urlWcf = "http://localhost:8732/Design_Time_Addresses/WcfServiceLibrary1/Json/"; 
-var urlDOM2    = "http://189.203.180.22:80/"; var Publi = 1; //activa
-var urlWcf2    = "http://189.203.180.22:100/wcf/WcfServiceLibrary1.Json.svc/"; //activa
+var urlWcf    = "http://192.168.2.100:100/wcf/WcfServiceLibrary1.Json.svc/"; 
+//var urlWcf = "http://192.168.2.204:90/wcf/WcfServiceLibrary1.Json.svc/"; 
+var urlDOM2    = "http://192.168.2.100:80/"; var Publi = 1; //activa
+var urlWcf2    = "http://192.168.2.100:100/wcf/WcfServiceLibrary1.Json.svc/"; //activa
 // var urlWcf = "http://192.168.2.100:100/wcf/WcfServiceLibrary1.Json.svc/"; 
 // var urlWcf = "http://192.168.2.236/ws/WcfServiceLibrary1.Json.svc/"; 
  // var urlWcf = "http://192.168.2.204/FFF/WcfServiceLibrary1.Json.svc/"; 
@@ -33,24 +33,24 @@ $(document).bind("pageinit", function () {
 	 var ipServidor = window.localStorage.getItem("IPServidor");
               if(ipServidor == null || ipServidor ==""){
                 $("#"+ipServidor).addClass('operando');
-                urlDOM = "http://187.157.115.98:80/";
-                urlWcf = "http://187.157.115.98:100/wcf/WcfServiceLibrary1.Json.svc/"; 
-                //urlWcf = "http://localhost:8732/Design_Time_Addresses/WcfServiceLibrary1/Json/"; 
+                urlDOM = "http://192.168.2.100:80/";
+                urlWcf = "http://192.168.2.100:100/wcf/WcfServiceLibrary1.Json.svc/"; 
+                //urlWcf = "http://192.168.2.204:90/wcf/WcfServiceLibrary1.Json.svc/"; 
                 // alert("180.22");
               }
               else{
                 if(ipServidor == "TELMEX"){
                   $("#"+ipServidor).addClass('operando');
-                  urlDOM = "http://187.157.115.98:80/"; 
-                  urlWcf = "http://187.157.115.98:100/wcf/WcfServiceLibrary1.Json.svc/"; 
-                  //urlWcf = "http://localhost:8732/Design_Time_Addresses/WcfServiceLibrary1/Json/"; 
+                  urlDOM = "http://192.168.2.100:80/"; 
+                  urlWcf = "http://192.168.2.100:100/wcf/WcfServiceLibrary1.Json.svc/"; 
+                  //urlWcf = "http://192.168.2.204:90/wcf/WcfServiceLibrary1.Json.svc/"; 
                   // alert("TELMEX 98.114");                  
                 }
                 if(ipServidor== "AXTEL"){
                   $("#"+ipServidor).addClass('operando');
-                  urlDOM = "http://189.203.180.22:80/";
-                  urlWcf = "http://189.203.180.22:100/wcf/WcfServiceLibrary1.Json.svc/"; 
-                  //urlWcf = "http://localhost:8732/Design_Time_Addresses/WcfServiceLibrary1/Json/"; 
+                  urlDOM = "http://192.168.2.100:80/";
+                  urlWcf = "http://192.168.2.100:100/wcf/WcfServiceLibrary1.Json.svc/"; 
+                  //urlWcf = "http://192.168.2.204:90/wcf/WcfServiceLibrary1.Json.svc/"; 
                   // alert("AXTEL 180.22");                  
                 }
               }
@@ -1649,8 +1649,8 @@ function ConsultaStock(Articulo, TipoConsulta, BDescripcion) {
 
 function VerificaDescripcionArticulo(Codigo) {
     var result = "";
-    //var Rol = window.localStorage.getItem('Rl')
-    var Rol = 1;
+    var Rol = window.localStorage.getItem('Rl')
+    //var Rol = 1;
     if (Rol != null && Rol != undefined && Rol > 0) {
         if (Codigo != "") {
             $.ajax({
@@ -1731,8 +1731,8 @@ function MustraSegunRol() {
     
     $('#idInformacion').css('display', 'block');
 
-    //var Rol = window.localStorage.getItem('Rl');
-    var Rol = 1;
+    var Rol = window.localStorage.getItem('Rl');
+    //var Rol = 1;
 
     if (Rol == null || Rol == undefined || Rol ==0) {
         $('#DescMax').css('display', 'none');
